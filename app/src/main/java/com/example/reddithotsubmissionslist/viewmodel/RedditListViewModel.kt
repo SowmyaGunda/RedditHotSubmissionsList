@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.reddithotsubmissionslist.model.data.AllAwardings
+import com.example.reddithotsubmissionslist.model.data.RedditHotListData
 import com.example.reddithotsubmissionslist.model.retrofit.ReddithotsubmissionslistApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,14 +20,14 @@ class RedditListViewModel(apiService: ReddithotsubmissionslistApiService) : View
 
     fun fetchRedditListFromRepository() {
         viewModelScope.launch(Dispatchers.IO) {
-            val redditListInfo: Call<AllAwardings> = reddithotsubmissionslistApiService.getRedditList()
-            redditListInfo.enqueue(object : Callback<AllAwardings> {
-                override fun onFailure(call: Call<AllAwardings>, t: Throwable) {
+            val redditListInfo: Call<RedditHotListData> = reddithotsubmissionslistApiService.getRedditList()
+            redditListInfo.enqueue(object : Callback<RedditHotListData> {
+                override fun onFailure(call: Call<RedditHotListData>, t: Throwable) {
                     Log.d("RedditListViewModel", "Failed:::" + t.message)
                     redditListLiveData.postValue(RedditListResponse.Failure(t as Exception))
                 }
 
-                override fun onResponse(call: Call<AllAwardings>, response: Response<AllAwardings>) {
+                override fun onResponse(call: Call<RedditHotListData>, response: Response<RedditHotListData>) {
                     if (response.isSuccessful) {
                         redditListLiveData.postValue(RedditListResponse.Success(response.body()!!))
 
@@ -42,7 +42,7 @@ class RedditListViewModel(apiService: ReddithotsubmissionslistApiService) : View
     }
 
     sealed class RedditListResponse {
-        data class Success(val allAwardings: AllAwardings) : RedditListResponse()
+        data class Success(val RedditHotListData: RedditHotListData) : RedditListResponse()
         data class Failure(val exception: Exception) : RedditListResponse()
     }
 }

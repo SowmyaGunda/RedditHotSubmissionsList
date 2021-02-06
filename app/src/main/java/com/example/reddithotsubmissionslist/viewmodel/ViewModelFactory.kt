@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class ViewModelFactory : ViewModelProvider.Factory {
-    lateinit var apiComponent: ReddithotsubmissionslistDaggerComponent
+    private lateinit var apiComponent: ReddithotsubmissionslistDaggerComponent
     @Inject
     lateinit var retrofit: Retrofit
 
@@ -22,11 +22,11 @@ class ViewModelFactory : ViewModelProvider.Factory {
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-    fun fetchApiService(): ReddithotsubmissionslistApiService {
+    private fun fetchApiService(): ReddithotsubmissionslistApiService {
         return retrofit.create(ReddithotsubmissionslistApiService::class.java)
     }
 
-    fun initDaggerComponent() {
+    private fun initDaggerComponent() {
         apiComponent = DaggerReddithotsubmissionslistDaggerComponent
             .builder()
             .reddithotsubmissionslistModule(ReddithotsubmissionslistModule())

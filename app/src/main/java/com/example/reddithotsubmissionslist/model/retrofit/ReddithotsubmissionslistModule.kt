@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Module
 open class ReddithotsubmissionslistModule {
     companion object {
-        const val DEFAULT_API_URL = "https://www.reddit.com/r/Android"
+        const val DEFAULT_API_URL = "https://www.reddit.com/r/Android/"
         const val TIMEOUT: Long = 3000 // ms
 
     }
