@@ -16,7 +16,7 @@ class RedditListAdapter(private var onItemClicked: OnItemClicked) : RecyclerView
     private val VIEW_TYPE_NORMAL = 1
     private var isLoaderVisible = false
 
-    private var redditList: List<Child> = emptyList<Child>()
+    private var redditList: MutableList<Child> = arrayListOf()
 
     private fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = false): View {
         return LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
@@ -55,17 +55,18 @@ class RedditListAdapter(private var onItemClicked: OnItemClicked) : RecyclerView
     }
 
     fun setAdapterList(list: List<Child>) {
-        this.redditList = list
+        this.redditList.addAll(list)
         notifyDataSetChanged()
     }
 
     fun addLoading() {
         isLoaderVisible = true
-
+        notifyItemInserted(redditList.size - 1)
     }
 
     fun removeLoading() {
         isLoaderVisible = false
+        notifyItemRemoved(redditList.size - 1)
     }
 
 
@@ -73,8 +74,8 @@ class RedditListAdapter(private var onItemClicked: OnItemClicked) : RecyclerView
         private var author: TextView = v.findViewById(R.id.author)
         private var title: TextView = v.findViewById(R.id.title)
         fun bind(child: ChildData) {
-            author.text = "postedBy: " +child.author
-            title.text =  child.title
+            author.text = "postedBy: " + child.author
+            title.text = child.title
             v.setOnClickListener {
                 onItemClicked.openWebLink(child.url)
             }

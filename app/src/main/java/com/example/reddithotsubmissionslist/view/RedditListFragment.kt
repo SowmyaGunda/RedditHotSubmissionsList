@@ -65,8 +65,8 @@ class RedditListFragment : Fragment(), RedditListAdapter.OnItemClicked, OnRefres
                 layoutManager.orientation)
         redditList.addItemDecoration(dividerItemDecoration)
         this.redditListData = redditHotListData.data.children
-        System.out.println("reddit list size "+ redditListData.size)
-
+        System.out.println("reddit list size " + redditListData.size)
+        caleculateTotalPages()
         onRefresh()
     }
 
@@ -142,28 +142,30 @@ class RedditListFragment : Fragment(), RedditListAdapter.OnItemClicked, OnRefres
     }
 
     private fun updatePage() {
-        var pageList: List<Child> = emptyList<Child>()
-        updatePositions()
-        pageList = redditListData.subList(startPos, endPos)
+        if (currentPage <= totalPage) {
+            var pageList: List<Child> = emptyList<Child>()
+            updatePositions()
+            pageList = redditListData.subList(startPos, endPos)
 
-        if (currentPage != PAGE_START) listAdapter.removeLoading()
-        listAdapter.setAdapterList(pageList)
-        swipeRefreshLayout.setRefreshing(false)
+            if (currentPage != PAGE_START) listAdapter.removeLoading()
+            listAdapter.setAdapterList(pageList)
+            swipeRefreshLayout.setRefreshing(false)
 
-        // check weather is last page or not
-        if (currentPage < totalPage) {
-            listAdapter.addLoading()
-        } else {
-            isLastPage = true
+            // check weather is last page or not
+            if (currentPage < totalPage) {
+                listAdapter.addLoading()
+            } else {
+                isLastPage = true
+            }
+            isLoading = false
         }
-        isLoading = false
     }
 
     private fun updatePositions() {
         if (redditListData.size > PAGE_SIZE) {
             if (currentPage == PAGE_START) {
                 startPos = 0
-                endPos = 9
+                endPos = 10
             } else {
                 startPos += PAGE_SIZE
                 if (currentPage == totalPage) {
